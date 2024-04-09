@@ -4,10 +4,10 @@ const eatAudio = new Audio("./sounds/eat.mp3");
 const moveAudio = new Audio("./sounds/move.mp3");
 const gameOverAudio = new Audio("./sounds/gameover.mp3");
 const bgmAudio = new Audio("./sounds/notPlaying.mp3");
-let time = 5;
-let lastPaintTime = 0;
+let speed = 5;
+let lastPaintspeed = 0;
 let score = 0;
-let speed = {x: 0, y: 0};
+let dirVector = {x: 0, y: 0};
 let food = {x: 6, y: 6}
 let snake = [{x: 17, y: 17}];
 
@@ -15,7 +15,7 @@ scoreBoard.innerHTML = `Score: ${score}`; // displaying the score
 
 // Function to update snake
 const updateSnake = () =>{
-    snake.unshift({x: snake[0].x + speed.x, y: snake[0].y + speed.y});
+    snake.unshift({x: snake[0].x + dirVector.x, y: snake[0].y + dirVector.y});
     snake.pop();
 }
 
@@ -24,7 +24,7 @@ const updateFood = () =>{
     if (snake[0].x === food.x && snake[0].y === food.y)
     {
         eatAudio.play();
-        snake.unshift({x: snake[0].x + speed.x, y: snake[0].y + speed.y});
+        snake.unshift({x: snake[0].x + dirVector.x, y: snake[0].y + dirVector.y});
         let [a, b] = [2, 24];
         food = {x: Math.round(a + (b-a)*Math.random()), y: Math.round(a + (b-a)*Math.random())};
         scoreBoard.innerHTML = `Score: ${++score}`;
@@ -75,10 +75,10 @@ const collide = () =>{
     {
         gameOverAudio.play();
         bgmAudio.pause();
-        speed = {x: 0, y: 0};
+        dirVector = {x: 0, y: 0};
         alert("Game Over");
         score = 0;
-        time = 5;
+        speed = 5;
         snake = [{x: 17, y: 17}];
         scoreBoard.innerHTML = `Score: ${score}`;
     }
@@ -100,15 +100,15 @@ const gameEngine = () =>{
 }
 
 // Main Function
-const main = (ctime) =>{
+const main = (cspeed) =>{
     window.requestAnimationFrame(main);
 
-    if ((ctime - lastPaintTime)/1000 < 1/time)
+    if ((cspeed - lastPaintspeed)/1000 < 1/speed)
     {
         return;
     }
 
-    lastPaintTime = ctime;
+    lastPaintspeed = cspeed;
     gameEngine();
 }
 
@@ -116,10 +116,10 @@ window.requestAnimationFrame(main);
 
 // controller
 window.addEventListener("keydown", k =>{
-    if (speed.x === 0 && speed.y === 0)
+    if (dirVector.x === 0 && dirVector.y === 0)
     {
         moveAudio.play();
-        speed = {x: 0, y: -1};
+        dirVector = {x: 0, y: -1};
     }
     else
     {
@@ -127,23 +127,23 @@ window.addEventListener("keydown", k =>{
         {
             case "ArrowRight":
                 moveAudio.play();
-                speed.x = 1;
-                speed.y = 0;
+                dirVector.x = 1;
+                dirVector.y = 0;
                 break;
             case "ArrowLeft":
                 moveAudio.play();
-                speed.x = -1;
-                speed.y = 0;
+                dirVector.x = -1;
+                dirVector.y = 0;
                 break;
             case "ArrowUp":
                 moveAudio.play();
-                speed.x = 0;
-                speed.y = -1;
+                dirVector.x = 0;
+                dirVector.y = -1;
                 break;
             case "ArrowDown":
                 moveAudio.play();
-                speed.x = 0;
-                speed.y = 1;
+                dirVector.x = 0;
+                dirVector.y = 1;
                 break;
             default:
                 break;
@@ -151,4 +151,4 @@ window.addEventListener("keydown", k =>{
     }
 })
 
-window.setInterval(()=>{ time+=0.2; }, 4000); // increasing the speed of playing slowly
+window.setInterval(()=>{ speed+=0.2; }, 4000); // increasing the dirVector of playing slowly
