@@ -54,9 +54,9 @@ const showFood = () =>{
 
 // Function for Collide
 const hasCollide = (s) =>{
-    for (let i = 1; i < snake.length; i++)
+    for (let i = 1; i < s.length; i++)
     {
-        if (snake[0].x === snake[i].x && snake[0].y === snake[i].y)
+        if (s[0].x === s[i].x && s[0].y === s[i].y)
         {
             return true;
         }
@@ -151,4 +151,4 @@ window.addEventListener("keydown", k =>{
     }
 })
 
-window.setInterval(()=>{ speed+=0.2; }, 4000); // increasing the dirVector of playing slowly
+window.setInterval(()=>{ speed+=0.2; }, 4000); // increasing the Speed of the snake
